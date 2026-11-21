@@ -44,6 +44,9 @@ func Add(st *State, now time.Time, task, delta int, source string) []Action {
 	t := &d.Tasks[task]
 	before := t.Done
 	t.Done = max(0, t.Done+delta)
+	if t.Kind == Test {
+		t.Done = min(t.Done, t.Target) // a test is done or not; it never goes over
+	}
 	applied := t.Done - before
 	if applied == 0 {
 		return nil

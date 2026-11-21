@@ -1,0 +1,480 @@
+{
+  "phase": "study",
+  "today": "2026-11-24",
+  "now": "2026-11-24T15:30:00+05:00",
+  "clock": "15:30",
+  "dayNumber": 1,
+  "dayCount": 11,
+  "daysLeft": 11,
+  "day": {
+    "date": "2026-11-24",
+    "dateLabel": "Tue 24 Nov",
+    "label": "Math day",
+    "preset": "math",
+    "off": "",
+    "status": "pending",
+    "tasks": [
+      {
+        "kind": "math",
+        "label": "Math",
+        "target": 100,
+        "done": 37,
+        "fraction": 0.37,
+        "quickAdd": [
+          1,
+          5,
+          10,
+          25
+        ],
+        "isTest": false
+      }
+    ],
+    "active": 0,
+    "done": false,
+    "remaining": 63,
+    "remainingText": "63 left, about 1 h 41 min",
+    "entries": [
+      {
+        "time": "11:50",
+        "text": "+12 math",
+        "source": "sim"
+      },
+      {
+        "time": "10:10",
+        "text": "+25 math",
+        "source": "sim"
+      }
+    ],
+    "changes": [],
+    "score": 0,
+    "tomorrow": "Tomorrow: English, 100 questions",
+    "canUndo": true
+  },
+  "strip": [
+    {
+      "date": "2026-11-24",
+      "dateLabel": "Tue 24 Nov",
+      "weekday": "Tue",
+      "label": "Math day",
+      "preset": "math",
+      "off": "",
+      "status": "pending",
+      "fraction": 0.37,
+      "isToday": true,
+      "isExam": false,
+      "editable": true,
+      "tasks": [
+        {
+          "kind": "math",
+          "label": "Math",
+          "target": 100,
+          "done": 37,
+          "fraction": 0.37,
+          "quickAdd": [
+            1,
+            5,
+            10,
+            25
+          ],
+          "isTest": false
+        }
+      ],
+      "summary": "Math, 100 questions",
+      "doneText": "37 of 100",
+      "changes": [],
+      "score": 0
+    },
+    {
+      "date": "2026-11-25",
+      "dateLabel": "Wed 25 Nov",
+      "weekday": "Wed",
+      "label": "English day",
+      "preset": "english",
+      "off": "",
+      "status": "upcoming",
+      "fraction": 0,
+      "isToday": false,
+      "isExam": false,
+      "editable": true,
+      "tasks": [
+        {
+          "kind": "english",
+          "label": "English",
+          "target": 100,
+          "done": 0,
+          "fraction": 0,
+          "quickAdd": [
+            1,
+            5,
+            10,
+            25
+          ],
+          "isTest": false
+        }
+      ],
+      "summary": "English, 100 questions",
+      "doneText": "0 of 100",
+      "changes": [],
+      "score": 0
+    },
+    {
+      "date": "2026-11-26",
+      "dateLabel": "Thu 26 Nov",
+      "weekday": "Thu",
+      "label": "Math day",
+      "preset": "math",
+      "off": "",
+      "status": "upcoming",
+      "fraction": 0,
+      "isToday": false,
+      "isExam": false,
+      "editable": true,
+      "tasks": [
+        {
+          "kind": "math",
+          "label": "Math",
+          "target": 100,
+          "done": 0,
+          "fraction": 0,
+          "quickAdd": [
+            1,
+            5,
+            10,
+            25
+          ],
+          "isTest": false
+        }
+      ],
+      "summary": "Math, 100 questions",
+      "doneText": "0 of 100",
+      "changes": [],
+      "score": 0
+    },
+    {
+      "date": "2026-11-27",
+      "dateLabel": "Fri 27 Nov",
+      "weekday": "Fri",
+      "label": "English day",
+      "preset": "english",
+      "off": "",
+      "status": "upcoming",
+      "fraction": 0,
+      "isToday": false,
+      "isExam": false,
+      "editable": true,
+      "tasks": [
+        {
+          "kind": "english",
+          "label": "English",
+          "target": 100,
+          "done": 0,
+          "fraction": 0,
+          "quickAdd": [
+            1,
+            5,
+            10,
+            25
+          ],
+          "isTest": false
+        }
+      ],
+      "summary": "English, 100 questions",
+      "doneText": "0 of 100",
+      "changes": [],
+      "score": 0
+    },
+    {
+      "date": "2026-11-28",
+      "dateLabel": "Sat 28 Nov",
+      "weekday": "Sat",
+      "label": "Practice test day",
+      "preset": "test",
+      "off": "",
+      "status": "upcoming",
+      "fraction": 0,
+      "isToday": false,
+      "isExam": false,
+      "editable": true,
+      "tasks": [
+        {
+          "kind": "test",
+          "label": "Practice test",
+          "target": 1,
+          "done": 0,
+          "fraction": 0,
+          "quickAdd": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "isTest": true
+        }
+      ],
+      "summary": "A practice test",
+      "doneText": "test not done",
+      "changes": [],
+      "score": 0
+    },
+    {
+      "date": "2026-11-29",
+      "dateLabel": "Sun 29 Nov",
+      "weekday": "Sun",
+      "label": "Rest day",
+      "preset": "rest",
+      "off": "rest",
+      "status": "rest",
+      "fraction": 0,
+      "isToday": false,
+      "isExam": false,
+      "editable": true,
+      "tasks": [],
+      "summary": "Rest day",
+      "doneText": "",
+      "changes": [],
+      "score": 0
+    },
+    {
+      "date": "2026-11-30",
+      "dateLabel": "Mon 30 Nov",
+      "weekday": "Mon",
+      "label": "Math day",
+      "preset": "math",
+      "off": "",
+      "status": "upcoming",
+      "fraction": 0,
+      "isToday": false,
+      "isExam": false,
+      "editable": true,
+      "tasks": [
+        {
+          "kind": "math",
+          "label": "Math",
+          "target": 100,
+          "done": 0,
+          "fraction": 0,
+          "quickAdd": [
+            1,
+            5,
+            10,
+            25
+          ],
+          "isTest": false
+        }
+      ],
+      "summary": "Math, 100 questions",
+      "doneText": "0 of 100",
+      "changes": [],
+      "score": 0
+    },
+    {
+      "date": "2026-12-01",
+      "dateLabel": "Tue 1 Dec",
+      "weekday": "Tue",
+      "label": "English day",
+      "preset": "english",
+      "off": "",
+      "status": "upcoming",
+      "fraction": 0,
+      "isToday": false,
+      "isExam": false,
+      "editable": true,
+      "tasks": [
+        {
+          "kind": "english",
+          "label": "English",
+          "target": 100,
+          "done": 0,
+          "fraction": 0,
+          "quickAdd": [
+            1,
+            5,
+            10,
+            25
+          ],
+          "isTest": false
+        }
+      ],
+      "summary": "English, 100 questions",
+      "doneText": "0 of 100",
+      "changes": [],
+      "score": 0
+    },
+    {
+      "date": "2026-12-02",
+      "dateLabel": "Wed 2 Dec",
+      "weekday": "Wed",
+      "label": "Practice test day",
+      "preset": "test",
+      "off": "",
+      "status": "upcoming",
+      "fraction": 0,
+      "isToday": false,
+      "isExam": false,
+      "editable": true,
+      "tasks": [
+        {
+          "kind": "test",
+          "label": "Practice test",
+          "target": 1,
+          "done": 0,
+          "fraction": 0,
+          "quickAdd": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "isTest": true
+        }
+      ],
+      "summary": "A practice test",
+      "doneText": "test not done",
+      "changes": [],
+      "score": 0
+    },
+    {
+      "date": "2026-12-03",
+      "dateLabel": "Thu 3 Dec",
+      "weekday": "Thu",
+      "label": "Math day",
+      "preset": "math",
+      "off": "",
+      "status": "upcoming",
+      "fraction": 0,
+      "isToday": false,
+      "isExam": false,
+      "editable": true,
+      "tasks": [
+        {
+          "kind": "math",
+          "label": "Math",
+          "target": 100,
+          "done": 0,
+          "fraction": 0,
+          "quickAdd": [
+            1,
+            5,
+            10,
+            25
+          ],
+          "isTest": false
+        }
+      ],
+      "summary": "Math, 100 questions",
+      "doneText": "0 of 100",
+      "changes": [],
+      "score": 0
+    },
+    {
+      "date": "2026-12-04",
+      "dateLabel": "Fri 4 Dec",
+      "weekday": "Fri",
+      "label": "Rest day",
+      "preset": "rest",
+      "off": "rest",
+      "status": "rest",
+      "fraction": 0,
+      "isToday": false,
+      "isExam": false,
+      "editable": true,
+      "tasks": [],
+      "summary": "Rest day",
+      "doneText": "",
+      "changes": [],
+      "score": 0
+    },
+    {
+      "date": "2026-12-05",
+      "dateLabel": "Sat 5 Dec",
+      "weekday": "Sat",
+      "label": "Exam day",
+      "preset": "exam",
+      "off": "",
+      "status": "exam",
+      "fraction": 0,
+      "isToday": false,
+      "isExam": true,
+      "editable": false,
+      "tasks": [],
+      "summary": "The SAT",
+      "doneText": "",
+      "changes": [],
+      "score": 0
+    }
+  ],
+  "streak": 0,
+  "total": 37,
+  "testsDone": 0,
+  "totals": "11 days. 37 questions. 0 tests.",
+  "planSummary": "2 tests, 4 math, 3 English, 2 rest: 700 questions",
+  "tray": {
+    "text": "37/100",
+    "glyph": "ring",
+    "progress": 0.37,
+    "alert": false,
+    "session": false,
+    "status": "Math day: 37 of 100"
+  },
+  "pnr": {
+    "clock": "21:19",
+    "minutesLeft": 349,
+    "red": false,
+    "fit": 100,
+    "fitText": "",
+    "nowFrac": 0.4642857142857143,
+    "pnrFrac": 0.8797619047619047,
+    "canPromise": true,
+    "promiseMax": 349
+  },
+  "session": null,
+  "promise": null,
+  "canQuit": false,
+  "settings": {
+    "onboarded": true,
+    "examDate": "2026-12-05",
+    "targetScore": 0,
+    "briefAt": 540,
+    "remindFrom": 540,
+    "remindUntil": 1380,
+    "intervalMin": 60,
+    "redIntervalMin": 30,
+    "rolloverHour": 4,
+    "targets": {
+      "english": 100,
+      "math": 100,
+      "test": 1
+    },
+    "quickAdd": {
+      "english": [
+        1,
+        5,
+        10,
+        25
+      ],
+      "math": [
+        1,
+        5,
+        10,
+        25
+      ]
+    },
+    "sessionMin": 50,
+    "testSessionMin": 150,
+    "hotkeys": true,
+    "sound": true,
+    "strict": true,
+    "trayText": "progress"
+  },
+  "system": {
+    "version": "",
+    "installed": false,
+    "dry": false,
+    "autostart": false,
+    "autostartNote": "",
+    "notifications": false,
+    "hotkeyErrors": null,
+    "dataDir": "",
+    "reduceMotion": false
+  }
+}
