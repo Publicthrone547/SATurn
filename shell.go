@@ -479,6 +479,11 @@ func (s *Shell) runScript(script string) {
 			_, err = s.do("off", func(st *core.State, now time.Time) ([]core.Action, error) { return core.SetOff(st, now, "", off) })
 		case "test":
 			s.testReminder(n)
+		case "quit":
+			// The same path as Cmd+Q or the menu item.
+			s.app.Quit()
+		case "bailout":
+			err = s.bailout(strings.TrimSpace(strings.TrimPrefix(strings.TrimSpace(raw), "bailout")))
 		default:
 			err = errors.New("unknown verb")
 		}
