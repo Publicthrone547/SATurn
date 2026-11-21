@@ -1,0 +1,29 @@
+@import "tailwindcss";
+@import "@fontsource/instrument-serif/400.css";
+
+:root {
+  color-scheme: dark;
+  --space: #0d1030;   /* background */
+  --deep:  #171b4a;   /* raised surfaces, buttons */
+  --line:  #2a2f6b;   /* hairlines, empty ring track */
+  --gold:  #f2c66d;   /* the ring, the big number, the primary button */
+  --ice:   #e6ecff;   /* text */
+  --dust:  #959ccb;   /* secondary text */
+  --mint:  #62e6b4;   /* done, and only done */
+  --coral: #ff6b57;   /* red zone and missed, and only those */
+  --calm:  cubic-bezier(0.2, 0, 0, 1);
+  --burst: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+@theme inline {
+  --color-space: var(--space); --color-deep: var(--deep); --color-line: var(--line);
+  --color-gold: var(--gold); --color-ice: var(--ice); --color-dust: var(--dust);
+  --color-mint: var(--mint); --color-coral: var(--coral);
+  --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", sans-serif;
+  --font-display: "Instrument Serif", "New York", Georgia, serif;
+}
+html, body, #app { height: 100%; }
+body { margin: 0; background: var(--space); color: var(--ice); font-family: var(--font-sans);
+       font-size: 13px; -webkit-font-smoothing: antialiased; user-select: none; }
+input, textarea { user-select: text; }
+:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; border-radius: 6px; }
+.drag { --wails-draggable: drag; }
