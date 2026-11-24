@@ -37,12 +37,12 @@
       {
         "time": "11:50",
         "text": "+12 math",
-        "source": "sim"
+        "source": "popover"
       },
       {
         "time": "10:10",
         "text": "+25 math",
-        "source": "sim"
+        "source": "hotkey"
       }
     ],
     "changes": [],
