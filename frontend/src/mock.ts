@@ -4,8 +4,8 @@
 // Query flags: ?phase=setup|exam|after, ?task=test, ?red=1, ?session=1, ?done=1,
 // ?island=tally.
 import base from "./mock-snapshot.json";
-import type { Snapshot } from "../bindings/github.com/Publicthrone547/reminder_sat/internal/core/models.js";
-import type { IslandPayload } from "../bindings/github.com/Publicthrone547/reminder_sat/models.js";
+import type { Snapshot } from "../bindings/github.com/Publicthrone547/SATurn/internal/core/models.js";
+import type { IslandPayload } from "../bindings/github.com/Publicthrone547/SATurn/models.js";
 
 type Fn = (d: unknown) => void;
 const listeners = new Map<string, Set<Fn>>();

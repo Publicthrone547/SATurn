@@ -6,7 +6,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/Publicthrone547/reminder_sat/internal/core"
+	"github.com/Publicthrone547/SATurn/internal/core"
 )
 
 const launchAgentPlist = `<?xml version="1.0" encoding="UTF-8"?>

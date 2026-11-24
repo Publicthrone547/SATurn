@@ -8,8 +8,8 @@ import (
 
 	"github.com/wailsapp/wails/v3/pkg/application"
 
-	"github.com/Publicthrone547/reminder_sat/internal/core"
-	"github.com/Publicthrone547/reminder_sat/internal/trayicon"
+	"github.com/Publicthrone547/SATurn/internal/core"
+	"github.com/Publicthrone547/SATurn/internal/trayicon"
 )
 
 type trayMenu struct {

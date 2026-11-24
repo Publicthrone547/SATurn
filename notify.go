@@ -9,7 +9,7 @@ import (
 
 	"github.com/wailsapp/wails/v3/pkg/services/notifications"
 
-	"github.com/Publicthrone547/reminder_sat/internal/core"
+	"github.com/Publicthrone547/SATurn/internal/core"
 )
 
 // setupNotifications checks the permission (installed, not dry) and

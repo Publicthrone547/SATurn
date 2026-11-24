@@ -5,7 +5,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/Publicthrone547/reminder_sat/internal/core"
+	"github.com/Publicthrone547/SATurn/internal/core"
 )
 
 // hotkeyAction runs one hotkey action ("add1", "undo", ...) from outside the

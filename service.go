@@ -4,7 +4,7 @@ import (
 	"maps"
 	"time"
 
-	"github.com/Publicthrone547/reminder_sat/internal/core"
+	"github.com/Publicthrone547/SATurn/internal/core"
 )
 
 // AppService is the API the frontend calls. Every method that changes state

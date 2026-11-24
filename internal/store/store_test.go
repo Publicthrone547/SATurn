@@ -6,7 +6,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/Publicthrone547/reminder_sat/internal/core"
+	"github.com/Publicthrone547/SATurn/internal/core"
 )
 
 func TestRoundTrip(t *testing.T) {

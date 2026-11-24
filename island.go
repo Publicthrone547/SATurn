@@ -7,7 +7,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/Publicthrone547/reminder_sat/internal/core"
+	"github.com/Publicthrone547/SATurn/internal/core"
 )
 
 type IslandButton struct {

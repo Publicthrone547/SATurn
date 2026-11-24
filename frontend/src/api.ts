@@ -1,11 +1,11 @@
 // The service the views call: the generated Wails bindings, or an in-memory
 // fake when built with VITE_MOCK=1 (npm run dev:mock) for interface work.
 import { Events } from "@wailsio/runtime";
-import * as real from "../bindings/github.com/Publicthrone547/reminder_sat/appservice.js";
+import * as real from "../bindings/github.com/Publicthrone547/SATurn/appservice.js";
 import * as mock from "./mock";
 
-export type * from "../bindings/github.com/Publicthrone547/reminder_sat/internal/core/models.js";
-export type { IslandPayload, IslandButton } from "../bindings/github.com/Publicthrone547/reminder_sat/models.js";
+export type * from "../bindings/github.com/Publicthrone547/SATurn/internal/core/models.js";
+export type { IslandPayload, IslandButton } from "../bindings/github.com/Publicthrone547/SATurn/models.js";
 
 export const useMock = import.meta.env.VITE_MOCK === "1";
 

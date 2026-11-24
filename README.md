@@ -10,7 +10,7 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/Publicthrone547/reminder_sat/releases/latest"><img alt="Latest release" src="https://img.shields.io/github/v/release/Publicthrone547/reminder_sat?color=c8f060&labelColor=1b1c1e&style=flat-square"></a>
+  <a href="https://github.com/Publicthrone547/SATurn/releases/latest"><img alt="Latest release" src="https://img.shields.io/github/v/release/Publicthrone547/SATurn?color=c8f060&labelColor=1b1c1e&style=flat-square"></a>
   <img alt="macOS 14 or later" src="https://img.shields.io/badge/macOS-14%2B-ecedee?labelColor=1b1c1e&style=flat-square">
   <img alt="Apple silicon" src="https://img.shields.io/badge/Apple%20silicon-arm64-ecedee?labelColor=1b1c1e&style=flat-square">
   <img alt="Go and Wails" src="https://img.shields.io/badge/Go%20%2B%20Wails%20v3-Vue%203-ecedee?labelColor=1b1c1e&style=flat-square">
@@ -111,7 +111,7 @@ On first run SATurn suggests a plan counted back from the exam: practice tests s
 
 ## Install
 
-1. Download `SATurn-<version>-darwin-arm64.dmg` from [the latest release](https://github.com/Publicthrone547/reminder_sat/releases/latest) and drag SATurn to Applications.
+1. Download `SATurn-<version>-darwin-arm64.dmg` from [the latest release](https://github.com/Publicthrone547/SATurn/releases/latest) and drag SATurn to Applications.
 2. The app is not notarised, so macOS refuses the first launch. Open System Settings → Privacy & Security and click **Open Anyway**.
 3. Walk through the four setup steps: the exam date, the hours SATurn may remind you (09:00 to 23:00 by default), the plan, and notifications, launch at login and your target score.
 4. In System Settings → Notifications → SATurn, choose the **Alerts** style so reminders stay on screen until you answer.
@@ -134,6 +134,7 @@ Everything stays on your Mac. SATurn has no account, no analytics and no network
 You need Go 1.27, Node 26 and the Wails CLI v3.0.0-beta.30 (`go install github.com/wailsapp/wails/v3/cmd/wails3@v3.0.0-beta.30`).
 
 ```sh
+git clone https://github.com/Publicthrone547/SATurn.git && cd SATurn
 make app        # bin/SATurn.app
 make install    # replace /Applications/SATurn.app and start it
 make test       # Go and frontend tests

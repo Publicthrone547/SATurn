@@ -12,9 +12,9 @@ import (
 	"github.com/wailsapp/wails/v3/pkg/application"
 	"github.com/wailsapp/wails/v3/pkg/services/notifications"
 
-	"github.com/Publicthrone547/reminder_sat/internal/core"
-	"github.com/Publicthrone547/reminder_sat/internal/sound"
-	"github.com/Publicthrone547/reminder_sat/internal/store"
+	"github.com/Publicthrone547/SATurn/internal/core"
+	"github.com/Publicthrone547/SATurn/internal/sound"
+	"github.com/Publicthrone547/SATurn/internal/store"
 )
 
 // BailoutPhrase is what strict mode asks the owner to type to quit anyway.

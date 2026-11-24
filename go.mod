@@ -1,4 +1,4 @@
-module github.com/Publicthrone547/reminder_sat
+module github.com/Publicthrone547/SATurn
 
 go 1.27.3
 
