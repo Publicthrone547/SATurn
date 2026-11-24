@@ -93,7 +93,7 @@ function short(d: StripDay): string {
 function targetText(d: StripDay): string {
   if (d.isExam || d.off) return "";
   return (d.tasks ?? [])
-    .map((t) => (t.isTest ? (t.done >= t.target ? "done" : "test") : d.editable && !d.isToday ? `${t.target}` : `${t.done}/${t.target}`))
+    .map((t) => (t.isTest ? (t.done >= t.target ? "done" : "") : d.editable && !d.isToday ? `${t.target}` : `${t.done}/${t.target}`))
     .join(" + ");
 }
 
