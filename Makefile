@@ -1,4 +1,4 @@
-VERSION := 1.0.0
+VERSION := 1.1.0
 APP     := SATurn
 BUNDLE  := bin/$(APP).app
 DMG     := bin/$(APP)-$(VERSION)-darwin-arm64.dmg

@@ -6,7 +6,7 @@ SATurn is a reminder, not a study platform. It never shows questions; it only co
 
 ## Install
 
-Open `SATurn-1.0.0-darwin-arm64.dmg` and drag SATurn to Applications. The app is not notarised, so the first launch needs **Open Anyway** in System Settings → Privacy & Security.
+Open `SATurn-1.1.0-darwin-arm64.dmg` and drag SATurn to Applications. The app is not notarised, so the first launch needs **Open Anyway** in System Settings → Privacy & Security.
 
 From the source: `make install` builds the app, replaces `/Applications/SATurn.app` and starts it.
 
