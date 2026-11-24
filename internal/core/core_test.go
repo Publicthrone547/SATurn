@@ -586,3 +586,15 @@ func TestOnboardingBuildsPlan(t *testing.T) {
 		t.Fatalf("summary %q", snap.PlanSummary)
 	}
 }
+
+// Hotkeys: a missing action gets its default, a cleared one stays cleared.
+func TestNormalizeKeys(t *testing.T) {
+	s := DefaultSettings()
+	s.Keys = map[string]string{"add1": " Cmd+Shift+1 ", "undo": "", "bogus": "Ctrl+B"}
+	got := Normalize(s).Keys
+	want := DefaultKeys()
+	want["add1"], want["undo"] = "Cmd+Shift+1", ""
+	if fmt.Sprint(got) != fmt.Sprint(want) {
+		t.Fatalf("got %v, want %v", got, want)
+	}
+}

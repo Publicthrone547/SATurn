@@ -85,6 +85,9 @@ func main() {
 
 	notes.OnNotificationResponse(sh.onNotificationResponse)
 	app.Event.OnApplicationEvent(events.Common.ApplicationStarted, func(*application.ApplicationEvent) { go sh.start() })
+	app.Event.OnApplicationEvent(events.Common.ApplicationLaunchedWithUrl, func(e *application.ApplicationEvent) {
+		go sh.openLink(e.Context().URL())
+	})
 	app.Event.OnApplicationEvent(events.Common.SystemDidWake, func(*application.ApplicationEvent) { go sh.woken() })
 	app.Event.OnApplicationEvent(events.Mac.ApplicationShouldHandleReopen, func(*application.ApplicationEvent) { go sh.openMain("") })
 

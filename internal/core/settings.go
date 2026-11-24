@@ -1,5 +1,7 @@
 package core
 
+import "strings"
+
 type Settings struct {
 	Onboarded      bool              `json:"onboarded"`
 	ExamDate       string            `json:"examDate"`       // "2026-12-05"
@@ -15,9 +17,21 @@ type Settings struct {
 	SessionMin     int               `json:"sessionMin"`
 	TestSessionMin int               `json:"testSessionMin"`
 	Hotkeys        bool              `json:"hotkeys"`
+	Keys           map[string]string `json:"keys"` // hotkey action -> accelerator, "" = none
 	Sound          bool              `json:"sound"`
 	Strict         bool              `json:"strict"`
 	TrayText       string            `json:"trayText"` // "progress" | "countdown" | "none"
+}
+
+// HotkeyActions are the actions a global hotkey can run, in display order.
+var HotkeyActions = []string{"add1", "add5", "add10", "undo", "popover"}
+
+// DefaultKeys are the default hotkeys, all on Command and Option.
+func DefaultKeys() map[string]string {
+	return map[string]string{
+		"add1": "Cmd+Option+1", "add5": "Cmd+Option+5", "add10": "Cmd+Option+0",
+		"undo": "Cmd+Option+Z", "popover": "Cmd+Option+S",
+	}
 }
 
 // DefaultExamDate is the owner's SAT.
@@ -37,6 +51,7 @@ func DefaultSettings() Settings {
 		SessionMin:     50,
 		TestSessionMin: 150,
 		Hotkeys:        true,
+		Keys:           DefaultKeys(),
 		Sound:          true,
 		Strict:         true,
 		TrayText:       "progress",
@@ -121,6 +136,15 @@ func Normalize(s Settings) Settings {
 		s.TestSessionMin = d.TestSessionMin
 	}
 	s.TestSessionMin = clamp(s.TestSessionMin, 60, 240)
+	// A missing action gets its default; an empty one stays cleared.
+	keys := map[string]string{}
+	for k, v := range DefaultKeys() {
+		if cur, ok := s.Keys[k]; ok {
+			v = strings.TrimSpace(cur)
+		}
+		keys[k] = v
+	}
+	s.Keys = keys
 	switch s.TrayText {
 	case "progress", "countdown", "none":
 	default:

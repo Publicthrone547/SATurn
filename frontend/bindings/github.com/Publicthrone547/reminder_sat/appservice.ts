@@ -75,6 +75,13 @@ export function OpenNotificationSettings(): $CancellablePromise<void> {
     return $Call.ByID(1147257436);
 }
 
+/**
+ * PauseHotkeys releases the global hotkeys while a new one is being recorded.
+ */
+export function PauseHotkeys(paused: boolean): $CancellablePromise<void> {
+    return $Call.ByID(2280713783, paused);
+}
+
 export function RequestNotifications(): $CancellablePromise<boolean> {
     return $Call.ByID(2539251633);
 }

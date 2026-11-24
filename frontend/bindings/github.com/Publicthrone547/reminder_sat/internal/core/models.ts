@@ -109,6 +109,11 @@ export interface Settings {
     "sessionMin": number;
     "testSessionMin": number;
     "hotkeys": boolean;
+
+    /**
+     * hotkey action -> accelerator, "" = none
+     */
+    "keys": { [_ in string]?: string } | null;
     "sound": boolean;
     "strict": boolean;
 

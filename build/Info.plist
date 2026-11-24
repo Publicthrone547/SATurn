@@ -14,5 +14,12 @@
   <key>LSApplicationCategoryType</key><string>public.app-category.productivity</string>
   <key>LSUIElement</key><true/>
   <key>NSHighResolutionCapable</key><true/>
+  <key>CFBundleURLTypes</key>
+  <array>
+    <dict>
+      <key>CFBundleURLName</key><string>io.github.publicthrone547.saturn</string>
+      <key>CFBundleURLSchemes</key><array><string>saturn</string></array>
+    </dict>
+  </array>
 </dict>
 </plist>

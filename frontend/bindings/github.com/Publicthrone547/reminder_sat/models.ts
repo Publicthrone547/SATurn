@@ -11,7 +11,7 @@ export interface IslandPayload {
     "seq": number;
 
     /**
-     * remind | ask | milestone | celebrate | welcome
+     * remind | ask | milestone | celebrate | welcome | tally
      */
     "mode": string;
     "level": number;

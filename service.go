@@ -1,6 +1,7 @@
 package main
 
 import (
+	"maps"
 	"time"
 
 	"github.com/Publicthrone547/reminder_sat/internal/core"
@@ -73,17 +74,20 @@ func (a *AppService) SuggestPlan(overwrite bool) core.Snapshot {
 }
 
 func (a *AppService) UpdateSettings(s core.Settings) core.Snapshot {
-	before := a.sh.Snapshot().Settings.Hotkeys
+	before := a.sh.Snapshot().Settings
 	snap, _ := a.sh.do("settings", func(st *core.State, now time.Time) ([]core.Action, error) {
 		return core.UpdateSettings(st, now, s), nil
 	})
-	if snap.Settings.Hotkeys != before {
+	if snap.Settings.Hotkeys != before.Hotkeys || !maps.Equal(snap.Settings.Keys, before.Keys) {
 		a.sh.registerHotkeys()
 		snap = a.sh.Snapshot()
 		a.sh.push(snap)
 	}
 	return snap
 }
+
+// PauseHotkeys releases the global hotkeys while a new one is being recorded.
+func (a *AppService) PauseHotkeys(paused bool) { a.sh.pauseHotkeys(paused) }
 
 func (a *AppService) CompleteOnboarding(targetScore int) core.Snapshot {
 	snap, _ := a.sh.do("onboarding", func(st *core.State, now time.Time) ([]core.Action, error) {

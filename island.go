@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 	"strconv"
+	"strings"
 	"sync"
 	"time"
 
@@ -17,7 +18,7 @@ type IslandButton struct {
 
 type IslandPayload struct {
 	Seq         int            `json:"seq"`
-	Mode        string         `json:"mode"` // remind | ask | milestone | celebrate | welcome
+	Mode        string         `json:"mode"` // remind | ask | milestone | celebrate | welcome | tally
 	Level       int            `json:"level"`
 	Title       string         `json:"title"`
 	Body        string         `json:"body"`
@@ -93,6 +94,33 @@ func islandFor(a core.Action, snap core.Snapshot) IslandPayload {
 		p.Fraction = 1
 	}
 	return p
+}
+
+// showTally confirms a hotkey or link entry: "+1 math, 38 of 100". It never
+// covers a sticky island or shows while the popover is open.
+func (s *Shell) showTally(n, task int, snap core.Snapshot) {
+	if len(snap.Day.Tasks) == 0 || (s.popover != nil && s.popover.IsVisible()) {
+		return
+	}
+	if task < 0 || task >= len(snap.Day.Tasks) {
+		task = snap.Day.Active
+	}
+	s.isl.mu.Lock()
+	busy := s.isl.visible && s.isl.sticky
+	s.isl.mu.Unlock()
+	if busy {
+		return
+	}
+	t := snap.Day.Tasks[task]
+	body := strconv.Itoa(t.Target-t.Done) + " left today"
+	if t.Done >= t.Target {
+		body = "Done for today"
+	}
+	s.showIsland(IslandPayload{
+		Mode: "tally", Title: "+" + strconv.Itoa(n) + " " + strings.ToLower(t.Label), Body: body,
+		HideAfterMs: 1600, Buttons: []IslandButton{},
+		Fraction: t.Fraction, Done: t.Done, Target: t.Target, QuickAdd: activeQuick(snap),
+	})
 }
 
 // showIsland drops the island with a payload.

@@ -48,6 +48,8 @@ type Shell struct {
 	notifMu   sync.Mutex
 	lastNotif []string
 
+	keysPaused bool // guarded by mu; the settings page is recording a hotkey
+
 	allowQuit atomic.Bool
 	woke      atomic.Bool
 	started   atomic.Bool
@@ -294,6 +296,13 @@ func (s *Shell) play(name string) {
 
 // add logs progress from any surface and plays the tick.
 func (s *Shell) add(task, delta int, source string) core.Snapshot {
+	snap, _ := s.addActs(task, delta, source)
+	return snap
+}
+
+// addActs is add that also reports how many actions (milestones,
+// celebrations) the entry caused.
+func (s *Shell) addActs(task, delta int, source string) (core.Snapshot, int) {
 	var acts int
 	snap, _ := s.do("add delta="+strconv.Itoa(delta)+" source="+source, func(st *core.State, now time.Time) ([]core.Action, error) {
 		a := core.Add(st, now, task, delta, source)
@@ -303,7 +312,36 @@ func (s *Shell) add(task, delta int, source string) core.Snapshot {
 	if delta > 0 && acts == 0 {
 		s.play(sound.Tick)
 	}
-	return snap
+	return snap, acts
+}
+
+// quickAdd logs from a hotkey or a link, when no SATurn window may be in
+// view, and confirms the new count on the island for a moment.
+func (s *Shell) quickAdd(n int, source string) {
+	task := questionTask(s.current())
+	if task == -2 {
+		log.Printf("add ignored source=%s: today has only a practice test", source)
+		return
+	}
+	snap, acts := s.addActs(task, n, source)
+	if acts == 0 {
+		s.showTally(n, task, snap)
+	}
+}
+
+// questionTask is the task a hotkey or a link adds to: the active one, or on
+// a day with a test and questions, the question task while the test is
+// active. -2 when today has nothing to count.
+func questionTask(snap core.Snapshot) int {
+	if !activeIsTest(snap) {
+		return -1
+	}
+	for i, t := range snap.Day.Tasks {
+		if !t.IsTest {
+			return i
+		}
+	}
+	return -2
 }
 
 // activeIsTest reports whether today's active task is a practice test.
