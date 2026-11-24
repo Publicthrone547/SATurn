@@ -1,15 +1,15 @@
 <template>
   <div class="welcome" v-if="s && f">
-    <div class="steps muted tabnum">Step {{ step }} of 4</div>
+    <div class="steps"><span v-for="i in 4" :key="i" :class="{ on: i <= step }" /></div>
 
     <section v-if="step === 1" class="step">
-      <h1 class="display">When is your SAT?</h1>
+      <h1 class="heading">When is your SAT?</h1>
       <input v-model="f.examDate" class="field date" type="date" @change="save" />
       <p class="muted">{{ daysText }}</p>
     </section>
 
     <section v-else-if="step === 2" class="step">
-      <h1 class="display">When may SATurn remind you?</h1>
+      <h1 class="heading">When may SATurn remind you?</h1>
       <div class="grid">
         <label>Morning brief</label>
         <input :value="clock(f.briefAt)" class="field" type="time" @change="setTime('briefAt', $event)" />
@@ -22,19 +22,19 @@
     </section>
 
     <section v-else-if="step === 3" class="step wide">
-      <h1 class="display">Your plan.</h1>
+      <h1 class="heading">Your plan.</h1>
       <p class="muted">A suggestion counted back from the exam: tests spaced out, rest before the day. Click a day to change it.</p>
       <Plan embedded />
     </section>
 
     <section v-else class="step">
-      <h1 class="display">Last things.</h1>
+      <h1 class="heading">Last things.</h1>
       <div class="grid">
         <label>Notifications</label>
         <div>
           <span class="inline">
             <button class="btn small" @click="allow">Allow notifications</button>
-            <span :class="s.system.notifications ? 'mint' : 'muted'">{{ s.system.notifications ? "Allowed" : notifNote }}</span>
+            <span :class="s.system.notifications ? 'ok' : 'muted'">{{ s.system.notifications ? "Allowed" : notifNote }}</span>
           </span>
           <p class="muted small">
             In System Settings choose the Alerts style for SATurn, so reminders stay on screen.
@@ -47,7 +47,7 @@
           <p class="muted small">{{ s.system.installed ? "SATurn opens by itself every morning." : s.system.autostartNote }}</p>
         </div>
         <label>Hotkeys</label>
-        <p class="muted small keys">⌃⌥1 adds one question from any app. ⌃⌥5 adds five, ⌃⌥0 adds ten, ⌃⌥Z undoes.</p>
+        <p class="muted small keys"><kbd>⌥⌘1</kbd> adds one question from any app, <kbd>⌥⌘Z</kbd> undoes. You can change them in Settings.</p>
         <label>Your target score</label>
         <input v-model.number="score" class="field num" type="number" min="400" max="1600" step="10" placeholder="1500" />
       </div>
@@ -119,13 +119,15 @@ async function start() {
 
 <style scoped>
 .welcome { min-height: 100%; box-sizing: border-box; padding: 28px 40px; display: flex; flex-direction: column; gap: 20px; }
-.steps { font-size: 12px; }
+.steps { display: flex; gap: 4px; }
+.steps span { width: 28px; height: 4px; border-radius: 2px; background: var(--cell); }
+.steps span.on { background: var(--accent); }
 .step { display: flex; flex-direction: column; gap: 14px; max-width: 560px; }
 .step.wide { max-width: none; }
-h1 { font-size: 40px; color: var(--gold); margin: 0; }
+h1 { font-size: 30px; }
 .date { width: 180px; height: 36px; font-size: 15px; }
 .grid { display: grid; grid-template-columns: 160px 1fr; gap: 14px 16px; align-items: center; }
-.grid label { color: var(--dust); }
+.grid label { color: var(--sub); }
 .num { width: 100px; }
 .small { font-size: 12px; margin: 6px 0 0; }
 .keys { margin: 0; }

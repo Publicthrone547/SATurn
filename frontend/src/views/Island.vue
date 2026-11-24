@@ -1,18 +1,13 @@
 <template>
   <div class="island" @mouseenter="hover = true" @mouseleave="hover = false">
     <div v-if="p" class="content" :key="p.seq">
-      <Ring
-        class="mini"
-        :fraction="ringFraction"
-        :done="p.done"
-        :target="p.target"
-        :is-test="p.isTest"
-        :size="56"
-        :number-size="17"
-        :lock="lockKey"
-      >
-        <span class="mid display tabnum">{{ p.isTest ? (p.fraction >= 1 ? "✓" : "T") : p.done }}</span>
-      </Ring>
+      <div class="meter" :class="{ full: p.mode === 'celebrate' || p.done >= p.target }">
+        <div class="num mono">
+          <template v-if="p.isTest">{{ p.fraction >= 1 ? "done" : "test" }}</template>
+          <template v-else>{{ p.done }}<span class="of">/{{ p.target }}</span></template>
+        </div>
+        <Tally v-if="!p.isTest" :done="p.mode === 'celebrate' ? p.target : p.done" :target="p.target" size="tiny" />
+      </div>
       <div class="text">
         <div class="title">{{ p.title }}</div>
         <div class="body">{{ p.body }}</div>
@@ -40,8 +35,8 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onBeforeUnmount, onMounted, ref } from "vue";
-import Ring from "../components/Ring.vue";
+import { onBeforeUnmount, onMounted, ref } from "vue";
+import Tally from "../components/Tally.vue";
 import LaterChooser from "../components/LaterChooser.vue";
 import { api, on, type IslandPayload } from "../api";
 import { run } from "../store";
@@ -49,18 +44,14 @@ import { run } from "../store";
 const p = ref<IslandPayload | null>(null);
 const hover = ref(false);
 const laterOpen = ref(false);
-const lockKey = ref("");
 let timer = 0;
 let left = 0;
 let startedAt = 0;
-
-const ringFraction = computed(() => (p.value?.mode === "celebrate" ? 1 : p.value?.fraction ?? 0));
 
 function show(payload: IslandPayload) {
   p.value = payload;
   laterOpen.value = false;
   clearTimeout(timer);
-  if (payload.mode === "celebrate") lockKey.value = `c${payload.seq}`;
   if (!payload.sticky && payload.hideAfterMs > 0) {
     left = payload.hideAfterMs;
     arm();
@@ -123,20 +114,22 @@ void startedAt;
 </script>
 
 <style scoped>
-.island { height: 100%; background: #000; color: var(--ice); overflow: hidden; }
+.island { height: 100%; background: #000; color: var(--text); overflow: hidden; }
 .content {
   height: 100%; display: flex; align-items: center; gap: 14px; padding: 6px 18px 8px;
   box-sizing: border-box; animation: enter 280ms var(--calm) both;
 }
 @keyframes enter { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
-.mini { flex: none; }
-.mid { font-size: 20px; color: var(--gold); }
+.meter { flex: none; width: 84px; display: flex; flex-direction: column; gap: 6px; }
+.num { font-size: 24px; font-weight: 600; letter-spacing: -0.04em; line-height: 1; color: var(--text); }
+.full .num { color: var(--accent); }
+.of { font-size: 12px; color: var(--sub); letter-spacing: 0; margin-left: 2px; }
 .text { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px; }
 .title { font-size: 14px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.body { font-size: 12px; color: var(--dust); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.body { font-size: 12px; color: var(--sub); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .row { display: flex; align-items: center; gap: 6px; margin-top: 4px; }
-.row .btn { background: #1b1f45; }
-.row .btn.primary { background: var(--gold); }
+.row .btn { background: #1d1d1f; }
+.row .btn.primary { background: var(--accent); }
 .spacer { flex: 1; }
 .close { align-self: flex-end; }
 @media (prefers-reduced-motion: reduce) { .content { animation: none; } }

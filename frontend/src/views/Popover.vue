@@ -1,9 +1,12 @@
 <template>
   <div class="pop" v-if="s">
     <header>
-      <span class="muted tabnum">{{ s.phase === "study" ? `T-${s.daysLeft}` : "SATurn" }}</span>
+      <span class="muted">
+        <template v-if="s.phase === 'study'">SAT in <span class="mono now">{{ s.daysLeft }}</span> {{ s.daysLeft === 1 ? "day" : "days" }}</template>
+        <template v-else>SATurn</template>
+      </span>
       <span class="right">
-        <span v-if="s.phase === 'study'" class="muted">streak {{ s.streak }}</span>
+        <span v-if="s.phase === 'study'" class="muted" title="Days in a row with the work done">streak <span class="mono now">{{ s.streak }}</span></span>
         <button class="gear" aria-label="Settings" title="Settings" @click="open('settings')">
           <svg viewBox="0 0 16 16" width="15" height="15" aria-hidden="true">
             <circle cx="8" cy="8" r="2.4" fill="none" stroke="currentColor" stroke-width="1.4" />
@@ -17,19 +20,19 @@
     </header>
 
     <section v-if="s.phase === 'setup'" class="centre">
-      <div class="display big">SATurn</div>
-      <p class="muted">Thirteen rings to the SAT. Set up the plan first.</p>
+      <div class="heading">SATurn</div>
+      <p class="muted">One count a day until the SAT. Set up the plan first.</p>
       <button class="btn primary" @click="open('')">Finish setup</button>
     </section>
 
     <section v-else-if="s.phase === 'exam'" class="centre">
-      <div class="display big">Today.</div>
-      <p v-if="s.settings.targetScore" class="display score">{{ s.settings.targetScore }}</p>
+      <div class="heading big">Exam day.</div>
+      <p v-if="s.settings.targetScore" class="mono score">{{ s.settings.targetScore }}</p>
       <p class="muted">You did the work. Go.</p>
     </section>
 
     <section v-else-if="s.phase === 'after'" class="centre">
-      <div class="display big">That was the plan.</div>
+      <div class="heading big">That was the plan.</div>
       <p class="muted">{{ s.totals }}</p>
       <button class="btn primary" @click="open('')">Close SATurn</button>
     </section>
@@ -39,7 +42,7 @@
       <DayStrip class="strip" :days="s.strip ?? []" :lit="lit" @open="open('plan')" />
     </template>
 
-    <p v-if="error" class="coral err">{{ error }}</p>
+    <p v-if="error" class="bad err">{{ error }}</p>
   </div>
 </template>
 
@@ -61,16 +64,17 @@ function open(tab: string) {
 
 <style scoped>
 .pop {
-  height: 100%; box-sizing: border-box; padding: 12px 16px 14px; display: flex; flex-direction: column; gap: 10px;
+  height: 100%; box-sizing: border-box; padding: 12px 16px 12px; display: flex; flex-direction: column; gap: 12px;
   border-radius: 14px; overflow: hidden;
 }
 header { display: flex; justify-content: space-between; align-items: center; height: 22px; }
 .right { display: flex; align-items: center; gap: 8px; }
-.gear { background: none; border: 0; color: var(--dust); padding: 3px; border-radius: 6px; cursor: pointer; display: flex; }
-.gear:hover { color: var(--ice); background: var(--deep); }
+.now { color: var(--text); }
+.gear { background: none; border: 0; color: var(--sub); padding: 3px; border-radius: 6px; cursor: pointer; display: flex; }
+.gear:hover { color: var(--text); background: var(--raised); }
 .centre { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; text-align: center; }
-.big { font-size: 40px; color: var(--gold); }
-.score { font-size: 56px; color: var(--gold); margin: 0; }
+.big { font-size: 30px; }
+.score { font-size: 56px; font-weight: 600; letter-spacing: -0.04em; color: var(--accent); margin: 0; }
 .strip { margin-top: auto; }
 .err { font-size: 12px; margin: 0; }
 </style>

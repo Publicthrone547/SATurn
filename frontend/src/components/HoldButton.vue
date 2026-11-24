@@ -56,7 +56,7 @@ onBeforeUnmount(() => cancelAnimationFrame(raf));
 <style scoped>
 .hold { position: relative; overflow: hidden; }
 .bar {
-  position: absolute; inset: 0; background: rgba(242, 198, 109, 0.35);
+  position: absolute; inset: 0; background: currentColor; opacity: 0.18;
   transform-origin: left center; pointer-events: none;
 }
 .label { position: relative; }

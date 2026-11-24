@@ -1,15 +1,30 @@
 import { describe, expect, it } from "vitest";
-import { arc, clock, countdown, duration, minutes, quarters } from "../format";
+import { accelerator, clock, countdown, duration, keyLabel, minutes, tally } from "../format";
 
-describe("ring quarters", () => {
-  it("splits a fraction into four quarters", () => {
-    expect(quarters(0)).toEqual([0, 0, 0, 0]);
-    expect(quarters(0.37).map((q) => +q.toFixed(2))).toEqual([1, 0.48, 0, 0]);
-    expect(quarters(1)).toEqual([1, 1, 1, 1]);
-    expect(quarters(1.12)).toEqual([1, 1, 1, 1]);
+describe("tally", () => {
+  it("shows one cell per question up to 100", () => {
+    expect(tally(100)).toEqual({ cells: 100, per: 1, cols: 25 });
+    expect(tally(60)).toEqual({ cells: 60, per: 1, cols: 15 });
+    expect(tally(250)).toEqual({ cells: 84, per: 3, cols: 21 });
   });
-  it("draws arcs clockwise from the top", () => {
-    expect(arc(100, 100, 80, 0, 90)).toBe("M 100.000 20.000 A 80 80 0 0 1 180.000 100.000");
+});
+
+describe("hotkeys", () => {
+  const ev = (code: string, m: Partial<Record<"ctrlKey" | "altKey" | "shiftKey" | "metaKey", boolean>> = {}) => ({
+    code, ctrlKey: false, altKey: false, shiftKey: false, metaKey: false, ...m,
+  });
+  it("labels accelerators with the menu glyphs", () => {
+    expect(keyLabel("Ctrl+Option+1")).toBe("⌃⌥1");
+    expect(keyLabel("Cmd+Shift+k")).toBe("⇧⌘K");
+    expect(keyLabel("Option+Space")).toBe("⌥Space");
+    expect(keyLabel("")).toBe("");
+  });
+  it("turns a key press into an accelerator", () => {
+    expect(accelerator(ev("Digit1", { ctrlKey: true, altKey: true }))).toBe("Ctrl+Option+1");
+    expect(accelerator(ev("KeyK", { metaKey: true, shiftKey: true }))).toBe("Shift+Cmd+K");
+    expect(accelerator(ev("F5", { ctrlKey: true }))).toBe("Ctrl+F5");
+    expect(accelerator(ev("Digit1", { shiftKey: true }))).toBe("");
+    expect(accelerator(ev("ShiftLeft", { ctrlKey: true }))).toBe("");
   });
 });
 

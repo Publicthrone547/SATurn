@@ -13,7 +13,7 @@
         :style="{ left: cx - r * 0.7 + 'px', top: cy - r * 0.7 + 'px', width: r * 1.4 + 'px', height: r * 1.4 + 'px' }"
         viewBox="0 0 100 100"
       >
-        <ellipse cx="50" cy="50" rx="46" ry="12" fill="none" stroke="var(--gold)" stroke-width="1.6" transform="rotate(-18 50 50)" />
+        <ellipse cx="50" cy="50" rx="46" ry="12" fill="none" stroke="var(--accent)" stroke-width="1.6" transform="rotate(-18 50 50)" />
       </svg>
       <svg
         v-if="playing.kind === 'test'"
@@ -22,7 +22,7 @@
         :style="{ left: cx - 8 + 'px', top: cy - 8 + 'px' }"
         width="16" height="16" viewBox="0 0 16 16"
       >
-        <path d="M8 1 L14 15 L8 11.5 L2 15 Z" fill="var(--gold)" />
+        <path d="M8 1 L14 15 L8 11.5 L2 15 Z" fill="var(--accent)" />
       </svg>
     </template>
   </div>
@@ -34,7 +34,7 @@ import confetti from "canvas-confetti";
 import { celebration, type CelebrateEvent } from "../store";
 import { reducedMotion } from "../format";
 
-// cx, cy: the ring's centre inside this overlay; r: the ring's radius.
+// cx, cy: the count's centre inside this overlay; r: the size of the burst.
 const props = withDefaults(defineProps<{ cx: number; cy: number; r: number; compact?: boolean }>(), { compact: false });
 const emit = defineEmits<{ play: [e: CelebrateEvent] }>();
 
@@ -71,7 +71,7 @@ watch(celebration, (e) => {
     const burst = (x: number, angle: number) =>
       fire!({
         particleCount: 90, spread: 70, startVelocity: 38, ticks: 160, scalar: 0.9,
-        colors: ["#f2c66d", "#d9b28a", "#62e6b4", "#e6ecff"], origin: { x, y: 0.45 }, angle,
+        colors: ["#c8f060", "#e6f7b5", "#ecedee", "#8b8f95"], origin: { x, y: 0.45 }, angle,
       });
     window.setTimeout(() => {
       burst(0.25, 60);
@@ -85,7 +85,7 @@ watch(celebration, (e) => {
 .cel { position: absolute; inset: 0; pointer-events: none; overflow: visible; z-index: 5; }
 .confetti { position: absolute; inset: 0; width: 100%; height: 100%; }
 .shock {
-  position: absolute; border-radius: 50%; border: 2px solid var(--gold);
+  position: absolute; border-radius: 50%; border: 2px solid var(--accent);
   animation: shock 600ms cubic-bezier(0, 0, 0.2, 1) 350ms both;
 }
 @keyframes shock {

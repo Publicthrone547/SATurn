@@ -17,10 +17,10 @@ const digits = computed(() => String(Math.max(0, Math.round(props.value))).split
 
 <style scoped>
 .odo {
-  display: flex; font-family: var(--font-display); color: var(--gold);
+  display: flex; font-family: var(--font-mono); color: inherit;
   line-height: 1; height: 1em; overflow: hidden; font-variant-numeric: tabular-nums;
 }
-.col { display: inline-block; width: calc(0.44em + 2px); height: 1em; overflow: hidden; text-align: center; }
+.col { display: inline-block; width: 0.6em; height: 1em; overflow: hidden; text-align: center; }
 .strip { display: flex; flex-direction: column; transition: transform 280ms var(--calm); }
 .strip span { height: 1em; }
 @media (prefers-reduced-motion: reduce) { .strip { transition: none; } }

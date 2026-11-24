@@ -58,7 +58,7 @@ func main() {
 		Name: "popover", URL: "/#/popover", Width: 360, Height: 540,
 		Frameless: true, AlwaysOnTop: true, Hidden: true, DisableResize: true,
 		HideOnEscape: true, HideOnFocusLost: true,
-		BackgroundColour: application.NewRGB(13, 16, 48),
+		BackgroundColour: application.NewRGB(18, 19, 20),
 	})
 	sh.main = app.Window.NewWithOptions(application.WebviewWindowOptions{
 		Name: "main", Title: "SATurn", URL: "/#/main",
@@ -67,7 +67,7 @@ func main() {
 			InvisibleTitleBarHeight: 38,
 			TitleBar:                application.MacTitleBarHiddenInset,
 		},
-		BackgroundColour: application.NewRGB(13, 16, 48),
+		BackgroundColour: application.NewRGB(18, 19, 20),
 	})
 	// Closing the main window hides it; the app lives in the menu bar.
 	sh.main.RegisterHook(events.Common.WindowClosing, func(e *application.WindowEvent) {

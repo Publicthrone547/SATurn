@@ -464,7 +464,14 @@
     "hotkeys": true,
     "sound": true,
     "strict": true,
-    "trayText": "progress"
+    "trayText": "progress",
+    "keys": {
+      "add1": "Cmd+Option+1",
+      "add5": "Cmd+Option+5",
+      "add10": "Cmd+Option+0",
+      "undo": "Cmd+Option+Z",
+      "popover": "Cmd+Option+S"
+    }
   },
   "system": {
     "version": "",

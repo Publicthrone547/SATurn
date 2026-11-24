@@ -1,73 +1,93 @@
 <template>
   <div v-if="s" class="panel" :class="{ large }" ref="root">
-    <div v-if="tasks.length > 1" class="switch" role="tablist" aria-label="Task">
-      <button
-        v-for="(t, i) in tasks"
-        :key="t.kind"
-        role="tab"
-        :aria-selected="sel === i"
-        :class="{ on: sel === i }"
-        @click="picked = i"
-      >
-        {{ t.isTest ? "Test" : t.label }}
-        <span v-if="t.isTest">{{ t.done >= t.target ? "✓" : "" }}</span>
-        <span v-else class="tabnum">{{ t.done }}</span>
-      </button>
+    <div class="top">
+      <div class="label">{{ s.day.label }}</div>
+      <div v-if="tasks.length > 1" class="switch" role="tablist" aria-label="Task">
+        <button
+          v-for="(t, i) in tasks"
+          :key="t.kind"
+          role="tab"
+          :aria-selected="sel === i"
+          :class="{ on: sel === i }"
+          @click="picked = i"
+        >
+          {{ t.isTest ? "Test" : t.label }}
+          <span v-if="t.isTest">{{ t.done >= t.target ? "✓" : "" }}</span>
+          <span v-else class="mono">{{ t.done }}</span>
+        </button>
+      </div>
     </div>
 
-    <div class="ringwrap" ref="ringBox">
-      <Ring
-        :fraction="task ? task.fraction : 0"
-        :done="task?.done ?? 0"
-        :target="task?.target ?? 0"
-        :is-test="!!task?.isTest"
-        :size="ringSize"
-        :number-size="large ? 76 : 56"
-        :show-track="pending"
-        :now-frac="s.pnr.nowFrac"
-        :pnr-frac="s.pnr.pnrFrac"
-        :state="ringState"
-        :flash="flash"
-        :lock="lockKey"
-      />
+    <div class="count" ref="countBox">
+      <template v-if="task">
+        <Odometer :value="task.done" :size="large ? 84 : 64" :class="{ full: task.done >= task.target }" />
+        <span class="of mono">/{{ task.target }}{{ task.isTest ? " test" : "" }}</span>
+      </template>
     </div>
 
-    <div class="captions" :class="{ fade: !!cel }">
-      <div class="label">{{ off ? s.day.label : s.day.label }}</div>
+    <Tally
+      v-if="task && !task.isTest"
+      :done="task.done"
+      :target="task.target"
+      :size="large ? 'large' : 'medium'"
+      :flash="flash"
+    />
+
+    <div class="status" :class="{ fade: !!cel }">
       <template v-if="off">
-        <div class="muted">Reminders are off today.</div>
+        <div>{{ s.day.off === "sick" ? "Sick day." : "Rest day." }} Reminders are off.</div>
         <div class="muted">{{ s.day.tomorrow }}</div>
       </template>
       <template v-else-if="s.day.done">
-        <div class="mint">Done for today</div>
+        <div class="ok">Done for today.</div>
         <div class="muted">{{ s.day.tomorrow }}</div>
       </template>
       <template v-else>
-        <div class="muted">{{ s.day.remainingText }}</div>
-        <div v-if="session" class="muted tabnum">Session running · {{ countdown(sessionLeft) }} left</div>
+        <div>{{ s.day.remainingText }}</div>
+        <div v-if="session" class="muted mono">Session running, {{ countdown(sessionLeft) }} left</div>
         <div v-else-if="s.promise" class="muted">You said you would start at {{ s.promise.clock }}</div>
-        <div v-else-if="s.pnr.red" class="coral">{{ s.pnr.fitText }}</div>
-        <div v-else class="muted">Start by {{ s.pnr.clock }} to finish today</div>
+        <div v-else-if="s.pnr.red" class="bad">{{ s.pnr.fitText }}</div>
       </template>
     </div>
 
     <div v-if="cel" class="celtext" :key="cel.id">
-      <div class="display title">{{ cel.title }}</div>
-      <div class="streak">Streak <span class="tabnum pop">{{ streakShown }}</span></div>
+      <div class="celtitle">{{ cel.title }}</div>
+      <div class="streak">Streak <span class="mono pop">{{ streakShown }}</span></div>
       <div class="muted tomorrow">{{ cel.kind === "final" ? cel.totals : cel.tomorrow }}</div>
-      <div v-if="cel.kind === 'final'" class="display go">Go get it.</div>
+      <div v-if="cel.kind === 'final'" class="go">Go get it.</div>
     </div>
+
+    <DayLine
+      v-if="pending && !session"
+      :from="clock(s.settings.remindFrom)"
+      :until="clock(s.settings.remindUntil)"
+      :now-frac="s.pnr.nowFrac"
+      :pnr-frac="s.pnr.pnrFrac"
+      :pnr-clock="s.pnr.clock"
+      :red="s.pnr.red"
+    />
 
     <template v-if="!off">
       <div v-if="task && !task.isTest" class="adds">
-        <button v-for="(n, i) in quick" :key="i" class="btn" @click="add(n)">+{{ n }}</button>
+        <button
+          v-for="(n, i) in quick"
+          :key="i"
+          class="btn"
+          :class="{ primary: i === 0 && !s.day.done }"
+          :data-add="n"
+          :title="keyFor(n) ? `+${n} from any app: ${keyLabel(keyFor(n))}` : `+${n}`"
+          @click="add(n)"
+        >
+          <span class="mono">+{{ n }}</span>
+          <kbd v-if="i === 0 && keyFor(n)">{{ keyLabel(keyFor(n)) }}</kbd>
+        </button>
       </div>
       <div v-else-if="task" class="testrow">
-        <HoldButton v-if="task.done < task.target" class="grow" @confirm="markDone">Hold for test done</HoldButton>
+        <HoldButton v-if="task.done < task.target" class="grow primary" @confirm="markDone">Hold when the test is done</HoldButton>
         <button v-else class="btn grow" disabled>Test done</button>
         <input
           v-model="score"
-          class="field score"
+          class="field score mono"
           inputmode="numeric"
           placeholder="Score"
           aria-label="Practice test score (optional)"
@@ -75,11 +95,11 @@
         />
       </div>
 
-      <button v-if="session" class="btn wide" @click="run(api.EndSession())">
-        End session <span class="tabnum muted">{{ countdown(sessionLeft) }}</span>
+      <button v-if="session" class="btn ghost wide" @click="run(api.EndSession())">
+        End session <span class="mono muted">{{ countdown(sessionLeft) }}</span>
       </button>
-      <button v-else-if="!s.day.done" class="btn primary wide" @click="run(api.StartSession(0))">
-        {{ task?.isTest ? `Start the test (${s.settings.testSessionMin} min)` : `Start a ${s.settings.sessionMin} minute session` }}
+      <button v-else-if="!s.day.done" class="btn ghost wide" @click="run(api.StartSession(0))">
+        {{ task?.isTest ? `Start the test, ${s.settings.testSessionMin} min` : `Start a ${s.settings.sessionMin} min session` }}
       </button>
     </template>
 
@@ -90,12 +110,12 @@
       <template v-else>
         <button class="link" :disabled="!s.day.canUndo" @click="run(api.Undo())">Undo</button>
         <button v-if="task && !task.isTest" class="link" @click="toggleExact">Set exact</button>
-        <button class="link" @click="dayOff = dayOff ? '' : 'menu'">Day off ▾</button>
+        <button class="link" @click="dayOff = dayOff ? '' : 'menu'">Day off</button>
       </template>
     </div>
 
     <form v-if="exact" class="inline" @submit.prevent="setExact">
-      <input ref="exactInput" v-model="exactValue" class="field grow" inputmode="numeric" :placeholder="`Done so far, 0 to ${task?.target}`" />
+      <input ref="exactInput" v-model="exactValue" class="field grow mono" inputmode="numeric" :placeholder="`Done so far, 0 to ${task?.target}`" />
       <button class="btn small" type="submit">Set</button>
       <button class="link" type="button" @click="exact = false">Cancel</button>
     </form>
@@ -111,18 +131,20 @@
       <button class="link" @click="dayOff = ''">Cancel</button>
     </div>
 
-    <Celebration :cx="ringCx" :cy="ringCy" :r="ringSize * 0.43" @play="onCelebrate" />
+    <Celebration :cx="countCx" :cy="countCy" :r="large ? 120 : 92" @play="onCelebrate" />
   </div>
 </template>
 
 <script setup lang="ts">
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from "vue";
-import Ring from "./Ring.vue";
+import Tally from "./Tally.vue";
+import DayLine from "./DayLine.vue";
+import Odometer from "./Odometer.vue";
 import HoldButton from "./HoldButton.vue";
 import Celebration from "./Celebration.vue";
 import { snap, run, celebration, type CelebrateEvent } from "../store";
 import { api, on } from "../api";
-import { countdown, reducedMotion } from "../format";
+import { clock, countdown, keyLabel, reducedMotion } from "../format";
 
 const props = withDefaults(defineProps<{ large?: boolean; source?: string }>(), { large: false, source: "popover" });
 const emit = defineEmits<{ lit: [n: number] }>();
@@ -138,9 +160,15 @@ const sel = computed(() => {
 const task = computed(() => tasks.value[sel.value]);
 const off = computed(() => !!s.value?.day.off);
 const pending = computed(() => s.value?.phase === "study" && !off.value && !s.value?.day.done && tasks.value.length > 0);
-const ringSize = computed(() => (props.large ? 260 : 200));
-const ringState = computed(() => (off.value ? "off" : s.value?.day.done ? "done" : s.value?.pnr.red ? "red" : "pending"));
 const quick = computed(() => task.value?.quickAdd ?? [1, 5, 10, 25]);
+
+// The global hotkey that adds n, when there is one.
+function keyFor(n: number): string {
+  const st = s.value?.settings;
+  if (!st?.hotkeys) return "";
+  const action = ({ 1: "add1", 5: "add5", 10: "add10" } as Record<number, string>)[n];
+  return action ? (st.keys?.[action] ?? "") : "";
+}
 
 watch(
   () => s.value?.day.date,
@@ -224,9 +252,8 @@ onMounted(() => {
 });
 onBeforeUnmount(() => offFocus?.());
 
-// Celebration: the quarter flash, the ring lock and the text.
+// Celebration: the quarter flash and the text.
 const flash = ref<{ quarter: number; id: string } | null>(null);
-const lockKey = ref("");
 const cel = ref<CelebrateEvent | null>(null);
 const streakShown = ref(0);
 let celTimer = 0;
@@ -234,7 +261,6 @@ watch(celebration, (e) => {
   if (e?.kind === "quarter" && e.quarter) flash.value = { quarter: e.quarter, id: e.id };
 });
 function onCelebrate(e: CelebrateEvent) {
-  lockKey.value = e.id;
   cel.value = e;
   const to = e.streak ?? 0;
   streakShown.value = Math.max(0, to - 1);
@@ -248,57 +274,68 @@ function onCelebrate(e: CelebrateEvent) {
 }
 onBeforeUnmount(() => clearTimeout(celTimer));
 
-// The ring's centre inside the panel, for the celebration overlay.
+// The count's centre inside the panel, for the celebration overlay.
 const root = ref<HTMLElement | null>(null);
-const ringBox = ref<HTMLElement | null>(null);
-const ringCx = ref(180);
-const ringCy = ref(140);
+const countBox = ref<HTMLElement | null>(null);
+const countCx = ref(180);
+const countCy = ref(80);
 function measure() {
   const a = root.value?.getBoundingClientRect();
-  const b = ringBox.value?.getBoundingClientRect();
+  const b = countBox.value?.getBoundingClientRect();
   if (!a || !b) return;
-  ringCx.value = b.left - a.left + b.width / 2;
-  ringCy.value = b.top - a.top + b.height / 2;
+  countCx.value = b.left - a.left + b.width / 2;
+  countCy.value = b.top - a.top + b.height / 2;
 }
 onMounted(() => nextTick(measure));
 watch(() => tasks.value.length, () => nextTick(measure));
 </script>
 
 <style scoped>
-.panel { position: relative; display: flex; flex-direction: column; align-items: stretch; gap: 10px; }
-.switch {
-  align-self: center; display: inline-flex; background: var(--deep); border-radius: 9px; padding: 2px;
-}
+.panel { position: relative; display: flex; flex-direction: column; gap: 12px; }
+.top { display: flex; align-items: center; justify-content: space-between; gap: 8px; min-height: 24px; }
+.label { font-weight: 600; font-size: 14px; }
+.switch { display: inline-flex; background: var(--raised); border-radius: 8px; padding: 2px; }
 .switch button {
-  border: 0; background: none; color: var(--dust); font: inherit; padding: 4px 12px; border-radius: 7px; cursor: pointer;
+  border: 0; background: none; color: var(--sub); font: inherit; font-size: 12px; padding: 3px 10px; border-radius: 6px; cursor: pointer;
   display: inline-flex; gap: 6px;
 }
-.switch button.on { background: var(--line); color: var(--ice); }
-.ringwrap { align-self: center; }
-.captions { text-align: center; display: flex; flex-direction: column; gap: 2px; min-height: 54px; transition: opacity 200ms var(--calm); }
-.captions.fade { opacity: 0; }
-.label { font-weight: 600; }
+.switch button.on { background: var(--line); color: var(--text); }
+
+.count { display: flex; align-items: baseline; gap: 6px; min-height: 64px; }
+.large .count { min-height: 84px; }
+.count :deep(.odo) { color: var(--text); font-weight: 600; letter-spacing: -0.04em; }
+.count :deep(.odo.full) { color: var(--accent); }
+.of { font-size: 20px; color: var(--sub); }
+.large .of { font-size: 26px; }
+
+.status { display: flex; flex-direction: column; gap: 2px; transition: opacity 200ms var(--calm); }
+.status.fade { opacity: 0; }
+
 .celtext {
-  position: absolute; left: 0; right: 0; text-align: center; z-index: 6;
-  top: calc(var(--ring) + 6px); pointer-events: none;
+  position: absolute; left: 0; right: 0; z-index: 6; pointer-events: none;
+  top: var(--celtop); background: var(--bg); padding-bottom: 6px;
 }
-.panel { --ring: 210px; }
-.panel.large { --ring: 270px; }
-.celtext .title { font-size: 24px; color: var(--gold); animation: rise 280ms var(--calm) 900ms both; }
+.panel { --celtop: 132px; }
+.panel.large { --celtop: 168px; }
+.celtitle { font-size: 18px; font-weight: 650; color: var(--accent); animation: rise 280ms var(--calm) 900ms both; }
 .celtext .streak { animation: rise 280ms var(--calm) 1100ms both; }
 .celtext .pop { display: inline-block; animation: pop 320ms var(--burst) 1100ms both; }
 .celtext .tomorrow { animation: rise 280ms var(--calm) 1400ms both; }
-.celtext .go { font-size: 20px; color: var(--gold); animation: rise 280ms var(--calm) 2400ms both; }
-@keyframes rise { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
-@keyframes pop { 0% { transform: scale(1); } 50% { transform: scale(1.2); } 100% { transform: scale(1); } }
-.adds { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+.celtext .go { font-size: 16px; font-weight: 650; color: var(--accent); animation: rise 280ms var(--calm) 2400ms both; }
+@keyframes rise { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+@keyframes pop { 0% { transform: scale(1); } 50% { transform: scale(1.25); } 100% { transform: scale(1); } }
+
+.adds { display: grid; grid-template-columns: 1.6fr 1fr 1fr 1fr; gap: 6px; }
+.adds .btn { height: 40px; font-size: 15px; }
+.adds .btn.primary kbd { background: rgba(18, 19, 20, 0.12); border-color: rgba(18, 19, 20, 0.2); color: var(--ink); }
 .testrow { display: flex; gap: 8px; }
+.testrow :deep(.hold.primary) { background: var(--accent); color: var(--ink); font-weight: 600; }
 .grow { flex: 1; }
-.score { width: 84px; height: 36px; }
+.score { width: 84px; height: 34px; }
 .wide { width: 100%; }
-.links { display: flex; justify-content: space-between; padding: 0 2px; }
+.links { display: flex; gap: 14px; padding: 0 2px; }
 .inline { display: flex; align-items: center; gap: 8px; }
-.confirm span { color: var(--ice); }
+.confirm span { color: var(--text); }
 @media (prefers-reduced-motion: reduce) {
   .celtext * { animation: none !important; }
 }

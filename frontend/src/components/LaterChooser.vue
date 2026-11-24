@@ -20,5 +20,5 @@ const options = [
 
 <style scoped>
 .later { display: flex; align-items: center; gap: 6px; }
-.q { color: var(--dust); margin-right: 2px; }
+.q { color: var(--sub); margin-right: 2px; }
 </style>

@@ -1,7 +1,8 @@
 // An in-memory fake of AppService for working on the interface in a browser
 // (npm run dev:mock). It starts from a snapshot the real core produced (a
 // math day at 37 of 100) and supports the everyday commands.
-// Query flags: ?phase=setup|exam|after, ?task=test, ?red=1, ?session=1, ?done=1.
+// Query flags: ?phase=setup|exam|after, ?task=test, ?red=1, ?session=1, ?done=1,
+// ?island=tally.
 import base from "./mock-snapshot.json";
 import type { Snapshot } from "../bindings/github.com/Publicthrone547/reminder_sat/internal/core/models.js";
 import type { IslandPayload } from "../bindings/github.com/Publicthrone547/reminder_sat/models.js";
@@ -208,6 +209,12 @@ export function IslandDone(_seq: number, _reason: string) {
 }
 
 export function IslandCurrent() {
+  if (params.get("island") === "tally") {
+    return Promise.resolve({
+      seq: ++seq, mode: "tally", level: 0, title: "+1 math", body: "62 left today", sticky: false, hideAfterMs: 0,
+      canLater: false, laterMax: 0, fraction: 0.38, done: 38, target: 100, isTest: false, quickAdd: [1, 5, 10, 25], buttons: [],
+    });
+  }
   return Promise.resolve(sample());
 }
 
@@ -246,6 +253,10 @@ export function TestReminder(_level: number) {
 
 export function Bailout(phrase: string) {
   return phrase === "I am done for today" ? Promise.resolve() : Promise.reject(new Error('type "I am done for today" exactly'));
+}
+
+export function PauseHotkeys(_paused: boolean) {
+  return Promise.resolve();
 }
 
 export function RetireAndQuit() {

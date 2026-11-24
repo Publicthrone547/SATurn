@@ -19,7 +19,7 @@
       <Welcome v-if="s.phase === 'setup'" />
       <Exam v-else-if="s.phase === 'exam' && tab !== 'settings'" @settings="tab = 'settings'" />
       <Farewell v-else-if="s.phase === 'after' && tab !== 'settings'" />
-      <Today v-else-if="tab === 'today'" @plan="tab = 'plan'" />
+      <Today v-else-if="tab === 'today'" @plan="tab = 'plan'" @settings="tab = 'settings'" />
       <Plan v-else-if="tab === 'plan'" />
       <History v-else-if="tab === 'history'" />
       <Settings v-else />
@@ -58,13 +58,17 @@ onBeforeUnmount(() => off?.());
 
 <style scoped>
 .main { height: 100%; display: flex; flex-direction: column; }
-.titlebar { height: 38px; flex: none; display: flex; align-items: center; justify-content: center; border-bottom: 1px solid var(--line); }
-.tabs { display: flex; gap: 2px; --wails-draggable: no-drag; }
+/* The tabs sit right of the traffic lights, like a native toolbar. */
+.titlebar { height: 38px; flex: none; display: flex; align-items: stretch; padding-left: 84px; border-bottom: 1px solid var(--line); }
+.tabs { display: flex; gap: 18px; --wails-draggable: no-drag; }
 .tabs button {
-  border: 0; background: none; color: var(--dust); font: inherit; padding: 5px 14px; border-radius: 8px; cursor: pointer;
+  position: relative; border: 0; background: none; color: var(--sub); font: inherit; padding: 0 2px; cursor: pointer;
 }
-.tabs button:hover { color: var(--ice); }
-.tabs button.on { background: var(--deep); color: var(--ice); }
-.name { font-weight: 500; }
+.tabs button:hover { color: var(--text); }
+.tabs button.on { color: var(--text); font-weight: 600; }
+.tabs button.on::after {
+  content: ""; position: absolute; left: 0; right: 0; bottom: -1px; height: 2px; background: var(--accent); border-radius: 1px;
+}
+.name { font-weight: 500; align-self: center; }
 .body { flex: 1; overflow: auto; }
 </style>

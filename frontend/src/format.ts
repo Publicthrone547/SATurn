@@ -1,8 +1,12 @@
 // Small pure helpers shared by the views.
 
-/** How full each of the ring's four quarters is, 0..1. */
-export function quarters(fraction: number): number[] {
-  return [0, 1, 2, 3].map((i) => Math.min(1, Math.max(0, fraction * 4 - i)));
+/** The cells of a day's tally: up to 100, each worth `per` questions, in
+ * four rows so that every row is a quarter of the day. */
+export function tally(target: number): { cells: number; per: number; cols: number } {
+  const t = Math.max(1, Math.round(target));
+  const per = Math.ceil(t / 100);
+  const cells = Math.ceil(t / per);
+  return { cells, per, cols: Math.ceil(cells / 4) };
 }
 
 /** "24:05" style countdown from seconds. */
@@ -38,18 +42,47 @@ export function duration(min: number): string {
   return `${h} h ${r} min`;
 }
 
-/** A point on a circle, clockwise from the top. */
-export function polar(cx: number, cy: number, r: number, deg: number): [number, number] {
-  const a = (deg * Math.PI) / 180;
-  return [cx + r * Math.sin(a), cy - r * Math.cos(a)];
+const modSymbols: [RegExp, string][] = [
+  [/^(ctrl|control)$/i, "⌃"],
+  [/^(option|alt|optionoralt)$/i, "⌥"],
+  [/^shift$/i, "⇧"],
+  [/^(cmd|command|cmdorctrl|super)$/i, "⌘"],
+];
+const keyNames: Record<string, string> = {
+  space: "Space", return: "↩", enter: "↩", tab: "⇥", escape: "⎋", backspace: "⌫", delete: "⌦",
+  left: "←", right: "→", up: "↑", down: "↓", plus: "+",
+};
+
+/** "Ctrl+Option+1" as the macOS menu glyphs, "⌃⌥1". */
+export function keyLabel(acc: string): string {
+  if (!acc) return "";
+  const parts = acc.split("+");
+  const key = parts.pop() ?? "";
+  const mods = modSymbols.map(([re, sym]) => (parts.some((p) => re.test(p)) ? sym : "")).join("");
+  return mods + (keyNames[key.toLowerCase()] ?? key.toUpperCase());
 }
 
-/** SVG path of an arc, clockwise from a1 to a2 (degrees, < 360 apart). */
-export function arc(cx: number, cy: number, r: number, a1: number, a2: number): string {
-  const [x1, y1] = polar(cx, cy, r, a1);
-  const [x2, y2] = polar(cx, cy, r, a2);
-  const large = a2 - a1 > 180 ? 1 : 0;
-  return `M ${x1.toFixed(3)} ${y1.toFixed(3)} A ${r} ${r} 0 ${large} 1 ${x2.toFixed(3)} ${y2.toFixed(3)}`;
+const codeKeys: Record<string, string> = {
+  Space: "Space", Enter: "Return", Tab: "Tab", ArrowLeft: "Left", ArrowRight: "Right", ArrowUp: "Up", ArrowDown: "Down",
+  Minus: "-", Equal: "=", BracketLeft: "[", BracketRight: "]", Semicolon: ";", Quote: "'", Comma: ",", Period: ".",
+  Slash: "/", Backslash: "\\", Backquote: "`",
+};
+
+/** A key press as a global-hotkey accelerator ("Ctrl+Option+K"), or "" while
+ * it is incomplete: a hotkey needs Control, Option or Command. The physical
+ * key decides, so Option+1 is "1" and not "¡", in any keyboard layout. */
+export function accelerator(e: { code: string; ctrlKey: boolean; altKey: boolean; shiftKey: boolean; metaKey: boolean }): string {
+  if (!e.ctrlKey && !e.altKey && !e.metaKey) return "";
+  let key = "";
+  const c = e.code;
+  if (/^Key[A-Z]$/.test(c)) key = c.slice(3);
+  else if (/^Digit\d$/.test(c)) key = c.slice(5);
+  else if (/^Numpad\d$/.test(c)) key = c.slice(6);
+  else if (/^F\d{1,2}$/.test(c)) key = c;
+  else key = codeKeys[c] ?? "";
+  if (!key) return "";
+  const mods = [e.ctrlKey && "Ctrl", e.altKey && "Option", e.shiftKey && "Shift", e.metaKey && "Cmd"].filter(Boolean);
+  return [...mods, key].join("+");
 }
 
 export function reducedMotion(): boolean {

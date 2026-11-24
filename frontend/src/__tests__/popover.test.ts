@@ -32,9 +32,10 @@ describe("Popover", () => {
     await flushPromises();
     expect(w.text()).toContain("Math day");
     expect(w.text()).toContain("63 left, about 1 h 41 min");
-    expect(w.text()).toContain("T-11");
-    const buttons = w.findAll("button").filter((b) => /^\+\d+$/.test(b.text()));
-    expect(buttons.map((b) => b.text())).toEqual(["+1", "+5", "+10", "+25"]);
+    expect(w.text()).toContain("SAT in 11 days");
+    const buttons = w.findAll("button[data-add]");
+    expect(buttons.map((b) => b.attributes("data-add"))).toEqual(["1", "5", "10", "25"]);
+    expect(buttons[0].text()).toBe("+1⌥⌘1");
     await buttons[2].trigger("click");
     await flushPromises();
     expect(calls).toContainEqual(["Add", 0, 10, "popover"]);

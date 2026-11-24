@@ -20,10 +20,10 @@ input { position: absolute; opacity: 0; width: 0; height: 0; }
 .track { width: 34px; height: 20px; border-radius: 10px; background: var(--line); position: relative; transition: background 140ms var(--calm); flex: none; }
 .knob {
   position: absolute; top: 2px; left: 2px; width: 16px; height: 16px; border-radius: 50%;
-  background: var(--ice); transition: transform 180ms var(--calm);
+  background: var(--text); transition: transform 180ms var(--calm);
 }
-input:checked + .track { background: var(--gold); }
-input:checked + .track .knob { transform: translateX(14px); background: var(--space); }
-input:focus-visible + .track { outline: 2px solid var(--gold); outline-offset: 2px; }
+input:checked + .track { background: var(--accent); }
+input:checked + .track .knob { transform: translateX(14px); background: var(--ink); }
+input:focus-visible + .track { outline: 2px solid var(--accent); outline-offset: 2px; }
 input:disabled + .track { opacity: 0.4; }
 </style>
