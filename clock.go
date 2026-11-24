@@ -10,7 +10,7 @@ import (
 	"time"
 )
 
-// env holds the development switches (IMPLEMENTATION.md 7.11).
+// env holds the development switches (SATURN_* environment variables).
 type env struct {
 	dataDir   string
 	dry       bool

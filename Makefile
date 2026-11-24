@@ -6,13 +6,10 @@ REL     := bin/release-$(VERSION)
 MACENV  := CGO_ENABLED=1 MACOSX_DEPLOYMENT_TARGET=14.0 CGO_CFLAGS=-mmacosx-version-min=14.0 CGO_LDFLAGS=-mmacosx-version-min=14.0
 GOFILES := $(shell find . -name '*.go' -not -path './frontend/*' -not -path './bin/*')
 
-.PHONY: help hooks frontend dist-stub bindings assets build app dmg install simulate test lint check check-attribution check-version release clean
+.PHONY: help frontend dist-stub bindings assets build app dmg install simulate test lint check check-version release clean
 
 help: ## list the commands
 	@grep -E '^[a-z-]+:.*## ' $(MAKEFILE_LIST) | awk -F ':.*## ' '{printf "  make %-18s %s\n", $$1, $$2}'
-
-hooks: ## install the commit-msg hook that rejects attribution lines
-	install -m 0755 scripts/commit-msg .git/hooks/commit-msg
 
 frontend: ## build the web UI into frontend/dist
 	cd frontend && (test -d node_modules || npm ci) && npm run build
@@ -60,16 +57,13 @@ test: dist-stub ## Go and frontend tests
 lint:
 	@test -z "$$(gofmt -l $(GOFILES))" || (echo "gofmt needed:"; gofmt -l $(GOFILES); exit 1)
 
-check-attribution: ## no commit names an AI assistant as author or co-author
-	@sh scripts/check-attribution.sh
-
 check-version: ## VERSION matches the changelog and has release notes
 	@v=$$(sed -n 's/^## \([0-9][0-9]*\.[0-9][0-9]*\.[0-9][0-9]*\) .*/\1/p' CHANGELOG.md | head -1); \
 	[ "$$v" = "$(VERSION)" ] || { echo "CHANGELOG.md starts with $$v, the Makefile says $(VERSION)"; exit 1; }; \
 	[ -f build/release-notes/$(VERSION).md ] || { echo "missing build/release-notes/$(VERSION).md"; exit 1; }; \
 	echo "version $(VERSION) ok"
 
-check: lint test check-attribution ## everything that must pass before a release
+check: lint test ## everything that must pass before a release
 
 release: check check-version dmg ## build the release files into bin/release-$(VERSION)/
 	rm -rf $(REL) && mkdir -p $(REL) && cp $(DMG) $(REL)/

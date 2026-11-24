@@ -5,7 +5,7 @@ import (
 	"time"
 )
 
-// Every user-facing reminder text is built here (IMPLEMENTATION.md 7.6).
+// Every user-facing reminder text is built here.
 
 var zeroLines = []string{
 	"The first quarter is the hardest one to start.",

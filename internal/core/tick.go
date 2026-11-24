@@ -23,7 +23,8 @@ func paceTenths(kind string) int {
 }
 
 // RemainingMinutes is how long the rest of the day takes at exam pace,
-// rounded up to the minute. Integer arithmetic on purpose (see IMPLEMENTATION.md 7.5).
+// rounded up to the minute. Integer arithmetic on purpose, so the result
+// never depends on floating point.
 func RemainingMinutes(d *Day) int {
 	tenths := 0
 	for _, t := range d.Tasks {
@@ -101,7 +102,7 @@ func (st *State) closeDays(today string) {
 
 // Tick is the reminder engine. The shell calls it every 20 seconds; it
 // updates the bookkeeping and returns at most one action. The order of the
-// steps is the specification (IMPLEMENTATION.md 7.5).
+// steps is the specification.
 func Tick(st *State, in TickInput) []Action {
 	s := st.Settings
 	now := in.Now

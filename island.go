@@ -44,7 +44,7 @@ type islandState struct {
 	timer   *time.Timer
 }
 
-// islandFor builds the island payload of an action (IMPLEMENTATION.md 7.17).
+// islandFor builds the island payload of an action.
 func islandFor(a core.Action, snap core.Snapshot) IslandPayload {
 	p := IslandPayload{Mode: a.Kind, Level: a.Level, Title: a.Title, Body: a.Body, Data: a.Data,
 		CanLater: snap.Pnr.CanPromise, LaterMax: snap.Pnr.PromiseMax, Buttons: []IslandButton{}}
